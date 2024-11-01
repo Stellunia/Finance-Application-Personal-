@@ -4,6 +4,7 @@ import main.ApplicationManager;
 import main.TransType;
 import main.account.Account;
 import main.account.AccountDetails;
+import main.menu.TransactionMenu;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -13,16 +14,13 @@ import java.util.Scanner;
 
 public class TransactionCreator {
     private Account account;
+    private TransactionMenu transactionMenu;
 
     // Handles the creation of transactions
     public void createTransaction() {
         while (true) {
             AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
-            System.out.println(account.getCurrentUser() + " has currently got: " + currentAccount.getBalance() + " to spend.");
-            System.out.println("Type 'create' to send a transaction to someone else. Does not work yet. DO NOT USE.");
-            System.out.println("Type 'deposit' to add balance to your account.");
-            System.out.println("Type 'send' to remove a current transaction.");
-            System.out.println("Type 'return' to return to the previous menu.");
+            transactionMenu.displayHelp();
 
             String transCommand = ApplicationManager.commandScanner.nextLine();
 
@@ -136,6 +134,8 @@ public class TransactionCreator {
 
                 case "return":
                     return;
+                case "stop":
+                    transactionMenu.stopHandler();
                 default:
                     System.out.println("'" + transCommand + "' is not a valid command. Write 'help' to get a list of commands.");
             }

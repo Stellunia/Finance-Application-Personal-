@@ -6,7 +6,6 @@ import main.transaction.TransactionCreator;
 
 public interface ApplicationInterface {
     void displayHelp();
-    void displayHistoryHelp();
     void handleTransaction(Account account, TransactionCreator transaction);
 
     void handleAccount(Account account);

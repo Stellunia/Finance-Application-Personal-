@@ -1,6 +1,6 @@
 package main.menu;
 
-public interface Menu {
+public interface MenuInterface {
     void displayHelp();
     void stopHandler();
 }

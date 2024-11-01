@@ -23,7 +23,7 @@ public class ApplicationManager {
 
         public ApplicationManager(Main main) {
             stopCommand = new StopCommand(main);
-            commandManager = new CommandManager();
+            commandManager = new CommandManager(main);
             transactionCreator = new TransactionCreator();
             account = new Account();
             commandScanner = new Scanner(System.in);
@@ -65,7 +65,7 @@ public class ApplicationManager {
                 String command = args[0];
                 switch (command) {
                     case "stop":
-                        stopCommand.run(args);
+                        stopCommand.run();
                         return;
                     case "transaction":
                         commandManager.handleTransaction(account, transactionCreator);

@@ -2,10 +2,15 @@ package main.command;
 
 import main.ApplicationInterface;
 import main.ApplicationManager;
+import main.Main;
+import main.account.AccountRemover;
+import main.menu.AccountMenu;
+import main.menu.HistoryMenu;
 import main.transaction.HistoryReader;
 import main.account.Account;
 import main.transaction.Transaction;
 import main.transaction.TransactionCreator;
+import main.transaction.TransactionRemover;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -13,9 +18,17 @@ import java.time.temporal.ChronoUnit;
 public class CommandManager implements ApplicationInterface {
     private HistoryReader historyReader;
     private TransactionCreator transactionCreator;
+    private TransactionRemover transactionRemover;
+    private AccountRemover accountRemover;
+    private HistoryMenu historyMenu;
+    private AccountMenu accountMenu;
 
-    public CommandManager () {
+    public CommandManager (Main main) {
         historyReader = new HistoryReader();
+        transactionRemover = new TransactionRemover();
+        accountRemover = new AccountRemover();
+        historyMenu = new HistoryMenu(main);
+        accountMenu = new AccountMenu(main);
     }
 
     @Override
@@ -30,18 +43,6 @@ public class CommandManager implements ApplicationInterface {
     }
 
     @Override
-    public void displayHistoryHelp() {
-        System.out.println("Type 'today' to sort by today's transactions.");
-        System.out.println("Type 'yesterday' to sort by transactions from the last day.");
-        System.out.println("Type 'week' to sort by transactions from the last week.");
-        System.out.println("Type 'month' to sort by transactions from the last month.");
-        System.out.println("Type 'year' to sort by transactions from the last year.");
-        System.out.println("Type 'all' to show all transactions.");
-        System.out.println("Type 'remove' to remove a transaction from your history.");
-        System.out.println("Type 'return' to return to the previous menu.");
-    }
-
-    @Override
     public void handleTransaction(Account account, TransactionCreator transaction) {
         System.out.println("Create a recurring or one-time transaction.");
         account.loadUsers();
@@ -53,18 +54,21 @@ public class CommandManager implements ApplicationInterface {
         System.out.println("These are your account details.");
         account.readAccountDetails();
 
-        while (true) {
-            System.out.println("Type 'remove' to delete your account.");
-            System.out.println("Type 'return' to return to the previous menu.");
+        accountMenu.displayHelp();
 
+        while (true) {
             String accountCommand = ApplicationManager.commandScanner.nextLine();
 
             switch(accountCommand) {
                 case "remove":
-                    handleAccountRemoval(account);
+                    accountRemover.handleAccountRemoval(account);
                     return;
                 case "return":
                     return;
+                case "help":
+                    accountMenu.displayHelp();
+                case "stop":
+                    accountMenu.stopHandler();
                 default:
                     System.out.println("'" + accountCommand + "' is not a valid command. Write 'help' to get a list of commands.");
             }
@@ -79,7 +83,7 @@ public class CommandManager implements ApplicationInterface {
         LocalDate startDate = null;
 
         while (true) {
-            displayHistoryHelp();
+            historyMenu.displayHelp();
             String historyCommand = ApplicationManager.commandScanner.nextLine();
 
             switch (historyCommand) {
@@ -103,10 +107,12 @@ public class CommandManager implements ApplicationInterface {
                     endDate = null;
                     break;
                 case "remove":
-                    handleTransactionRemoval(currentUser);
+                    transactionRemover.handleTransactionRemoval(currentUser);
                     return;
                 case "return":
                     return;
+                case "stop":
+                    historyMenu.stopHandler();
                 default:
                     System.out.println("'" + historyCommand + "' is not a valid command.");
                     continue;
@@ -114,43 +120,6 @@ public class CommandManager implements ApplicationInterface {
 
             historyReader.readHistoryDetails(startDate, endDate);
             endDate = LocalDate.now();
-        }
-    }
-
-    public void handleAccountRemoval(Account account) {
-        System.out.println("Are you sure you'd like to delete your account?");
-        System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
-        String confirmation = ApplicationManager.commandScanner.nextLine();
-        if (confirmation.equalsIgnoreCase("yes")) {
-            account.removeAccount();
-        }
-    }
-
-    public void handleTransactionRemoval(String currentUser) {
-        while (true) {
-            System.out.println("Type 'remove' to delete a transaction.");
-            System.out.println("Type 'return' to return to the previous menu.");
-
-            String command = ApplicationManager.commandScanner.nextLine();
-            switch(command) {
-                case "remove":
-                    System.out.println("Are you sure you'd like to delete a transaction?");
-                    System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
-                    String confirmation = ApplicationManager.commandScanner.nextLine();
-                    if (confirmation.equalsIgnoreCase("yes")) {
-                        transactionCreator.removeTransaction(currentUser);
-                        return;
-                    } else if (confirmation.equalsIgnoreCase("return")){
-                        return;
-                    } else {
-                        System.out.println(confirmation + " is not a valid input.");
-                    }
-                    break;
-                case "return":
-                    return;
-                default:
-                    System.out.println("'" + command + "' is not a valid command. Write 'help' to get a list of commands.");
-            }
         }
     }
 }

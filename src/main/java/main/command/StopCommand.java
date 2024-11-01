@@ -9,7 +9,7 @@ public class StopCommand {
         this.main = main;
     }
 
-    public void run(String[] args) {
+    public void run() {
         main.running = false;
     }
 }
