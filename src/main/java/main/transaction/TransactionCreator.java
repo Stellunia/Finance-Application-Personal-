@@ -2,7 +2,6 @@ package main.transaction;
 
 import main.ApplicationManager;
 import main.Main;
-import main.TransType;
 import main.account.Account;
 import main.account.AccountDetails;
 import main.account.AccountManager;

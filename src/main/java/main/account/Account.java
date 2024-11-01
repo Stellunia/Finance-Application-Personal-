@@ -1,13 +1,9 @@
 package main.account;
 
 import main.ApplicationManager;
-import main.transaction.Transaction;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 public class Account {

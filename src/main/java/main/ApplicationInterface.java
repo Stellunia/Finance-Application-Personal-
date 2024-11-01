@@ -1,7 +1,6 @@
 package main;
 
 import main.account.Account;
-import main.transaction.Transaction;
 import main.transaction.TransactionCreator;
 
 public interface ApplicationInterface {

@@ -1,6 +1,5 @@
 package main.menu;
 
-import javafx.scene.paint.Stop;
 import main.Main;
 import main.command.StopCommand;
 

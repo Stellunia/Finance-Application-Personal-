@@ -1,6 +1,6 @@
 package main.account;
 
-import main.TransType;
+import main.transaction.TransType;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -15,7 +15,6 @@ public class AccountManager {
     // Function to add balance to an account.
     public double addBalanceInt(String addTitle, String addMessage, double addAmount, TransType addTransType, LocalDate addTransDate) {
         AccountDetails currentAccount = Account.userInfo.get(Account.getCurrentUser());
-        //AccountDetails currentAccount = account.userInfo.get(username);
 
         double newBalance = currentAccount.getBalance() + addAmount;
         currentAccount.setBalance(newBalance);
@@ -33,7 +32,6 @@ public class AccountManager {
     public double removeBalanceInt(String removeTitle, String removeMessage, double removeAmount, TransType removeTransType, LocalDate removeTransDate) {
         AccountDetails currentAccount = Account.userInfo.get(Account.getCurrentUser());
         String username = Account.getCurrentUser();
-        //AccountDetails currentAccount = account.userInfo.get(username);
 
         if (currentAccount.balanceAmount(removeAmount)){
             double newBalance = currentAccount.getBalance() - removeAmount;

@@ -1,8 +1,6 @@
 package main.menu;
 
 import main.Main;
-import main.account.Account;
-import main.account.AccountRemover;
 import main.command.StopCommand;
 
 public class AccountMenu implements MenuInterface {

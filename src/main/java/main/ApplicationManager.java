@@ -3,10 +3,8 @@ package main;
 import main.account.Account;
 import main.command.CommandManager;
 import main.command.StopCommand;
-import main.transaction.Transaction;
 import main.transaction.TransactionCreator;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ApplicationManager {

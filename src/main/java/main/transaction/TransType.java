@@ -1,4 +1,4 @@
-package main;
+package main.transaction;
 
 public enum TransType {
     ONE_TIME,

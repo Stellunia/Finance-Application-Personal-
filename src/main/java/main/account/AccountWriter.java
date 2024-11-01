@@ -1,6 +1,6 @@
 package main.account;
 
-import main.TransType;
+import main.transaction.TransType;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

@@ -1,5 +1,4 @@
 package main.transaction;
-import main.TransType;
 
 import java.time.LocalDate;
 
