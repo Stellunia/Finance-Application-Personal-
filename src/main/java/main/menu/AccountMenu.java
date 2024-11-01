@@ -7,8 +7,6 @@ import main.command.StopCommand;
 
 public class AccountMenu implements MenuInterface {
     private StopCommand stopCommand;
-    private Account account;
-    private AccountRemover accountRemover;
 
     public AccountMenu(Main main) {
         stopCommand = new StopCommand(main);

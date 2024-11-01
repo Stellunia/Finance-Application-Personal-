@@ -8,7 +8,6 @@ import main.menu.AccountMenu;
 import main.menu.HistoryMenu;
 import main.transaction.HistoryReader;
 import main.account.Account;
-import main.transaction.Transaction;
 import main.transaction.TransactionCreator;
 import main.transaction.TransactionRemover;
 
@@ -17,7 +16,6 @@ import java.time.temporal.ChronoUnit;
 
 public class CommandManager implements ApplicationInterface {
     private HistoryReader historyReader;
-    private TransactionCreator transactionCreator;
     private TransactionRemover transactionRemover;
     private AccountRemover accountRemover;
     private HistoryMenu historyMenu;
@@ -46,7 +44,7 @@ public class CommandManager implements ApplicationInterface {
     public void handleTransaction(Account account, TransactionCreator transaction) {
         System.out.println("Create a recurring or one-time transaction.");
         account.loadUsers();
-        transaction.createTransaction();
+        transaction.createTransaction(account);
     }
 
     @Override
@@ -67,8 +65,10 @@ public class CommandManager implements ApplicationInterface {
                     return;
                 case "help":
                     accountMenu.displayHelp();
+                    break;
                 case "stop":
                     accountMenu.stopHandler();
+                    return;
                 default:
                     System.out.println("'" + accountCommand + "' is not a valid command. Write 'help' to get a list of commands.");
             }
@@ -113,6 +113,7 @@ public class CommandManager implements ApplicationInterface {
                     return;
                 case "stop":
                     historyMenu.stopHandler();
+                    return;
                 default:
                     System.out.println("'" + historyCommand + "' is not a valid command.");
                     continue;

@@ -1,9 +1,11 @@
 package main.transaction;
 
 import main.ApplicationManager;
+import main.Main;
 import main.TransType;
 import main.account.Account;
 import main.account.AccountDetails;
+import main.account.AccountManager;
 import main.menu.TransactionMenu;
 
 import java.io.*;
@@ -14,10 +16,17 @@ import java.util.Scanner;
 
 public class TransactionCreator {
     private Account account;
+    private AccountDetails accountDetails;
+    private AccountManager accountManager;
     private TransactionMenu transactionMenu;
 
+    public TransactionCreator(Main main) {
+        transactionMenu = new TransactionMenu(main);
+        accountManager = new AccountManager();
+    }
+
     // Handles the creation of transactions
-    public void createTransaction() {
+    public void createTransaction(Account account) {
         while (true) {
             AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
             transactionMenu.displayHelp();
@@ -93,7 +102,9 @@ public class TransactionCreator {
                     currentAccount.addTransactionType(newTransaction);
                     System.out.println("Successfully deposited balance into your account.");
 
-                    currentAccount.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
+                    //AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
+                    //currentAccount.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
+                    accountManager.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
                     break;
 
                 case "send":
@@ -129,13 +140,15 @@ public class TransactionCreator {
                     currentAccount.addTransactionType(newRemoveTransaction);
                     System.out.println("Successfully sent a transaction.");
 
-                    currentAccount.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
+                    accountManager.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
+
                     break;
 
                 case "return":
                     return;
                 case "stop":
                     transactionMenu.stopHandler();
+                    return;
                 default:
                     System.out.println("'" + transCommand + "' is not a valid command. Write 'help' to get a list of commands.");
             }

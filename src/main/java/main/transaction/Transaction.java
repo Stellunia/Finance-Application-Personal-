@@ -1,24 +1,10 @@
 package main.transaction;
 
-import main.ApplicationManager;
-import main.TransType;
 import main.account.Account;
-import main.account.AccountDetails;
-
-import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Transaction {
-
     private Account account;
-    //private AccountDetails accountDetails;
-
-/*    boolean addingBalance = false;
-    boolean removingBalance = false;*/
 
     private String transTitle;
     private String transMessage;

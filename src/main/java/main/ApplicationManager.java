@@ -11,11 +11,9 @@ import java.util.Scanner;
 
 public class ApplicationManager {
         public static Scanner commandScanner;
-        //private CommandManagerOld helpCommand;
         private CommandManager commandManager;
         private StopCommand stopCommand;
         private Account account;
-        private Transaction transaction;
         private TransactionCreator transactionCreator;
 
         static public boolean loginCheck = true;
@@ -24,7 +22,7 @@ public class ApplicationManager {
         public ApplicationManager(Main main) {
             stopCommand = new StopCommand(main);
             commandManager = new CommandManager(main);
-            transactionCreator = new TransactionCreator();
+            transactionCreator = new TransactionCreator(main);
             account = new Account();
             commandScanner = new Scanner(System.in);
         }

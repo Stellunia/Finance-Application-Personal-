@@ -11,6 +11,7 @@ public class TransactionMenu implements MenuInterface {
 
     public TransactionMenu(Main main) {
         stopCommand = new StopCommand(main);
+        this.account = account;
     }
 
     @Override

@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class HistoryReader {
     private Account account;
 
-
     // TODO: Call upon the balance of the user, allow to transfer between accounts.
     // DONE: List transaction history upon user asking for access.
     // DONE (Half done, sort of - removes transaction from history rather than one that hasn't occured yet

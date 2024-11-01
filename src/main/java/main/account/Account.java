@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Account {
-    File userFolder;
-    //File historyFolder;
+    public File userFolder;
     Scanner scanner = new Scanner(System.in);
-    public static String currentUser = null;
-    public static String currentPass = null;
-    public static double currentBalance = 0;
+    static String currentUser = null;
+    private String currentPass = null;
+    private double currentBalance = 0;
     public static HashMap<String, AccountDetails> userInfo = new HashMap<>();
     private FileReader fileReader;
 
@@ -36,7 +35,7 @@ public class Account {
             String passCredentials = scanner.nextLine();
 
             if (userInfo.containsKey(nameCredentials) && userInfo.get
-                    (nameCredentials).password.equals(passCredentials)) {
+                    (nameCredentials).getPassword().equals(passCredentials)) {
                 System.out.println("Login successful.");
                 System.out.println("Welcome, " + nameCredentials + ".");
                 System.out.println("Write 'help' to receive a list of commands.");
@@ -210,7 +209,7 @@ public class Account {
 
     // Getters for the user, not all in use
     public static String getCurrentUser() { return currentUser; }
-    public static String getCurrentPass() { return currentPass; }
-    public static double getCurrentBalance() { return currentBalance; }
+    public String getCurrentPass() { return currentPass; }
+    public double getCurrentBalance() { return currentBalance; }
 }
 
