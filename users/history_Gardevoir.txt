@@ -1,0 +1,24 @@
+Title: Stinky | Message: You are stinky | Amount: -500 | Type: ONE_TIME | Date: 2024-09-24
+
+Title: Smelly | Message: You are smelly | Amount: +900 | Type: RECURRING_WEEKLY | Date: 2024-09-28
+
+Title: Cat | Message: I love cats | Amount: +8302 | Type: ONE_TIME | Date: 2024-01-28
+
+Title: Bnuuy | Message: I love bnuuy | Amount: +981 | Type: RECURRING_YEARLY | Date: 2024-09-10
+
+Title: Testing titles | Message: Testing transaction titled numerals | Amount: 500 | Type: ONE_TIME | Date: 2024-09-30
+
+Title: Testing Shenanigans | Message: Testing transaction titled numerals 2 | Amount: -500 | Type: ONE_TIME | Date: 2024-09-30
+
+Title: Testing Whoa | Message: Testing transaction titled numerals 3 | Amount: -750 | Type: ONE_TIME | Date: 2024-09-30
+
+Title: Deposit | Message: Depositing test | Amount: +500 | Type: ONE_TIME | Date: 2024-09-30
+
+Title: Send | Message: Creating a transaction | Amount: -100 | Type: RECURRING_YEARLY | Date: 2024-09-30
+
+Title: Sending | Message: sending mnuuy | Amount: -900 | Type: ONE_TIME | Date: 2024-09-30
+
+Title: Depositing | Message: depositing mnuuy | Amount: +2000 | Type: RECURRING_MONTHLY | Date: 2024-09-30
+
+Title: title | Message: message | Amount: -500.0 | Type: ONE_TIME | Date: 2024-11-01
+
