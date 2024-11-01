@@ -1,31 +1,30 @@
 package main;
 
 import main.account.Account;
-import main.command.CommandManagerImpI;
+import main.command.CommandManager;
 import main.command.StopCommand;
 import main.transaction.Transaction;
+import main.transaction.TransactionCreator;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ApplicationManager {
         public static Scanner commandScanner;
-        //private CommandManager helpCommand;
-        private CommandManagerImpI commandManager;
+        //private CommandManagerOld helpCommand;
+        private CommandManager commandManager;
         private StopCommand stopCommand;
         private Account account;
         private Transaction transaction;
+        private TransactionCreator transactionCreator;
 
         static public boolean loginCheck = true;
         static public boolean accountCheck = false;
-        //static public boolean transCheck = false;
-        //static public boolean historyCheck = false;
 
         public ApplicationManager(Main main) {
             stopCommand = new StopCommand(main);
-            //helpCommand = new CommandManager();
-            transaction = new Transaction("", "", 0.0, "ONE_TIME", LocalDate.now());
-            commandManager = new CommandManagerImpI();
+            commandManager = new CommandManager();
+            transactionCreator = new TransactionCreator();
             account = new Account();
             commandScanner = new Scanner(System.in);
         }
@@ -69,7 +68,7 @@ public class ApplicationManager {
                         stopCommand.run(args);
                         return;
                     case "transaction":
-                        commandManager.handleTransaction(account, transaction);
+                        commandManager.handleTransaction(account, transactionCreator);
                         //commandManager.handleTransactionCommand(account, transaction);
                         break;
                     case "history":

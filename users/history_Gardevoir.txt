@@ -22,3 +22,7 @@ Title: Depositing | Message: depositing mnuuy | Amount: +2000 | Type: RECURRING_
 
 Title: title | Message: message | Amount: -500.0 | Type: ONE_TIME | Date: 2024-11-01
 
+Title: poop | Message: fart | Amount: +500.0 | Type: ONE_TIME | Date: 2024-11-01
+
+Title: poot | Message: toot | Amount: -1000.0 | Type: ONE_TIME | Date: 2024-11-01
+

@@ -1,8 +1,6 @@
 package main.command;
 
-import main.ApplicationInterface;
 import main.ApplicationManager;
-import main.transaction.HistoryReader;
 import main.account.Account;
 import main.transaction.Transaction;
 import main.transaction.TransactionCreator;
@@ -10,16 +8,12 @@ import main.transaction.TransactionCreator;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class CommandManager implements ApplicationInterface {
-    private HistoryReader historyReader;
+public class CommandManagerOld {
+    private ApplicationManager applicationManager;
     private TransactionCreator transactionCreator;
 
-    public CommandManager () {
-        historyReader = new HistoryReader();
-    }
-
-    @Override
-    public void displayHelp() {
+    // Displays the help menu
+    static public void helpRun() {
         System.out.println("Commands:");
         System.out.println(" transaction - Create a new transaction.");
         System.out.println(" history - View the history of transactions.");
@@ -29,8 +23,8 @@ public class CommandManager implements ApplicationInterface {
         System.out.println(" stop - quit the application.");
     }
 
-    @Override
-    public void displayHistoryHelp() {
+    // Displays the history menu
+    static public void helpHistoryRun(){
         System.out.println("Type 'today' to sort by today's transactions.");
         System.out.println("Type 'yesterday' to sort by transactions from the last day.");
         System.out.println("Type 'week' to sort by transactions from the last week.");
@@ -41,15 +35,15 @@ public class CommandManager implements ApplicationInterface {
         System.out.println("Type 'return' to return to the previous menu.");
     }
 
-    @Override
-    public void handleTransaction(Account account, TransactionCreator transaction) {
+    // Calls upon the transaction functions to print out the details for the user
+    static public void handleTransactionCommand(Account account, TransactionCreator transaction){
         System.out.println("Create a recurring or one-time transaction.");
         account.loadUsers();
         transaction.createTransaction();
     }
 
-    @Override
-    public void handleAccount(Account account) {
+    // Calls upon the account details function to display the user's account information, while also allowing for the removal of their account
+    public static void handleAccountCommand(Account account){
         System.out.println("These are your account details.");
         account.readAccountDetails();
 
@@ -61,8 +55,14 @@ public class CommandManager implements ApplicationInterface {
 
             switch(accountCommand) {
                 case "remove":
-                    handleAccountRemoval(account);
-                    return;
+                    System.out.println("Are you sure you'd like to delete your account?");
+                    System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
+                    String confirmation = ApplicationManager.commandScanner.nextLine();
+                    if (confirmation.equalsIgnoreCase("yes")) {
+                        account.removeAccount();
+                        return;
+                    }
+                    break;
                 case "return":
                     return;
                 default:
@@ -71,16 +71,29 @@ public class CommandManager implements ApplicationInterface {
         }
     }
 
-    @Override
-    public void handleHistory(Account account) {
+    // Displays the transaction history for the user and sets up sorting it needs
+    public void handleHistoryCommand(Account account){
         String currentUser = account.getCurrentUser();
         System.out.println("This is your transaction history.");
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = null;
 
+
         while (true) {
-            displayHistoryHelp();
+            helpHistoryRun();
             String historyCommand = ApplicationManager.commandScanner.nextLine();
+
+            /* TODO: Use keywords such as "RECURRING_DAILY", "RECURRING_WEEKLY", "RECURRING_MONTHLY", "RECURRING_YEARLY" & "ONE_TIME" -
+            to sort by the different types of transactions.
+            DONE: Use dates to sort by transactions that's occurred from today's date (1 day ago), (1 week ago), (1 month ago) & (1 year ago)
+            Title: Stinky | Message: You are stinky | Amount: 500 | Type: ONE_TIME | Date: 2024-09-24
+
+            Title: Smelly | Message: You are smelly | Amount: 900 | Type: RECURRING_WEEKLY | Date: 2024-09-27
+
+            Title: Cat | Message: I love cats | Amount: 8302 | Type: ONE_TIME | Date: 2023-09-28
+
+            Title: Bnuuy | Message: I love bnuuy | Amount: 981 | Type: RECURRING_YEARLY | Date: 2024-08-28
+            * */
 
             switch (historyCommand) {
                 case "today":
@@ -103,8 +116,30 @@ public class CommandManager implements ApplicationInterface {
                     endDate = null;
                     break;
                 case "remove":
-                    handleTransactionRemoval(currentUser);
-                    return;
+                    while (true) {
+                        System.out.println("Type 'remove' to delete a transaction.");
+                        System.out.println("Type 'return' to return to the previous menu.");
+
+                        switch(historyCommand) {
+                            case "remove":
+                                System.out.println("Are you sure you'd like to delete a transaction?");
+                                System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
+                                String confirmation = ApplicationManager.commandScanner.nextLine();
+                                if (confirmation.equalsIgnoreCase("yes")) {
+                                    transactionCreator.removeTransaction(currentUser);
+                                    return;
+                                } else if (confirmation.equalsIgnoreCase("return")){
+                                    return;
+                                } else {
+                                    System.out.println(confirmation + " is not a valid input.");
+                                }
+                                break;
+                            case "return":
+                                return;
+                            default:
+                                System.out.println("'" + historyCommand + "' is not a valid command. Write 'help' to get a list of commands.");
+                        }
+                    }
                 case "return":
                     return;
                 default:
@@ -112,45 +147,8 @@ public class CommandManager implements ApplicationInterface {
                     continue;
             }
 
-            historyReader.readHistoryDetails(startDate, endDate);
+            //account.readHistoryDetails(startDate, endDate);
             endDate = LocalDate.now();
-        }
-    }
-
-    public void handleAccountRemoval(Account account) {
-        System.out.println("Are you sure you'd like to delete your account?");
-        System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
-        String confirmation = ApplicationManager.commandScanner.nextLine();
-        if (confirmation.equalsIgnoreCase("yes")) {
-            account.removeAccount();
-        }
-    }
-
-    public void handleTransactionRemoval(String currentUser) {
-        while (true) {
-            System.out.println("Type 'remove' to delete a transaction.");
-            System.out.println("Type 'return' to return to the previous menu.");
-
-            String command = ApplicationManager.commandScanner.nextLine();
-            switch(command) {
-                case "remove":
-                    System.out.println("Are you sure you'd like to delete a transaction?");
-                    System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");
-                    String confirmation = ApplicationManager.commandScanner.nextLine();
-                    if (confirmation.equalsIgnoreCase("yes")) {
-                        transactionCreator.removeTransaction(currentUser);
-                        return;
-                    } else if (confirmation.equalsIgnoreCase("return")){
-                        return;
-                    } else {
-                        System.out.println(confirmation + " is not a valid input.");
-                    }
-                    break;
-                case "return":
-                    return;
-                default:
-                    System.out.println("'" + command + "' is not a valid command. Write 'help' to get a list of commands.");
-            }
         }
     }
 }

@@ -2,7 +2,7 @@ package main;
 
 public class Main {
     public boolean running = true;
-    public ApplicationManager commandManager = new ApplicationManager(this);
+    public ApplicationManager applicationManager = new ApplicationManager(this);
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -11,7 +11,7 @@ public class Main {
 
         while (main.running) {
             try {
-                main.commandManager.readCommand();
+                main.applicationManager.readCommand();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

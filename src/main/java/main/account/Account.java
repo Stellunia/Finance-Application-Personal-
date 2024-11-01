@@ -18,6 +18,7 @@ public class Account {
     public static String currentPass = null;
     public static double currentBalance = 0;
     public static HashMap<String, AccountDetails> userInfo = new HashMap<>();
+    private FileReader fileReader;
 
     public Account() {
         initializeSaveManager();
@@ -206,65 +207,6 @@ public class Account {
     // "Title: Stinky | Message: You are stinky | Amount: 500 | Type: ONE_TIME | Date: 25-09-2024"
     // "Title: Smelly | Message: You are smelly | Amount: 900 | Type: RECURRING_WEEKLY | Date: 27-09-2024"
     // DONE: Needs to build a history-reading system that would format the transactions based on current date, see Transactions.java?
-
-    // Handles reading out the history details for the user when called upon
-    public void readHistoryDetails(LocalDate startDate, LocalDate endDate) {
-        List<Transaction> transactionList = Transaction.readTransactions(this.getCurrentUser());
-        LocalDate currentDate = LocalDate.now();
-
-        double transactionCount = 0;
-        double totalIncome = 0;
-        double totalSpending = 0;
-
-        for (Transaction t : transactionList) {
-            if ((startDate == null || !t.getTransDate().isBefore(startDate)) &&
-                    (endDate == null || !t.getTransDate().isAfter(endDate))) {
-
-
-                    transactionCount++;
-                    System.out.println("Transaction #" + transactionCount);
-                    System.out.println(categoriseTransaction(currentDate, t.getTransDate()));
-                    System.out.println(t.toString());
-                    System.out.println();
-
-                    double amount = t.getTransAmount();
-                    if (amount > 0) {
-                        totalIncome += amount;
-                    } else {
-                        totalSpending += Math.abs(amount);
-                    }
-                }
-            }
-
-            if (transactionCount == 0) {
-                System.out.println("There is no valid history information for this user.");
-            } else {
-                System.out.println("Income: " + totalIncome);
-                System.out.println("Spendings: " + totalSpending);
-            }
-    }
-
-    // Handles organising the transaction's dates in order to display them cleanly when the user sorts the history
-    private String categoriseTransaction(LocalDate currentDate, LocalDate transDate) {
-        long daysBetween = ChronoUnit.DAYS.between(transDate, currentDate);
-
-        if (daysBetween == 0) {
-            return "Today";
-        } else if (daysBetween == 1) {
-            return "1 day ago";
-        } else if (daysBetween <= 7) {
-            return daysBetween + " days ago";
-        } else if (daysBetween <= 30) {
-            long weeksBetween = ChronoUnit.WEEKS.between(transDate, currentDate);
-            return weeksBetween == 1 ? "1 week ago" : weeksBetween + " weeks ago";
-        } else if (daysBetween <= 365) {
-            long monthsBetween = ChronoUnit.MONTHS.between(transDate, currentDate);
-            return monthsBetween == 1 ? "1 month ago" : monthsBetween + " months ago";
-        } else {
-            long yearsBetween = ChronoUnit.YEARS.between(transDate, currentDate);
-            return yearsBetween == 1 ? "1 year ago" : yearsBetween + " years ago";
-        }
-    }
 
     // Getters for the user, not all in use
     public static String getCurrentUser() { return currentUser; }
