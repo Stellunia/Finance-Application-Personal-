@@ -4,6 +4,8 @@ import main.ApplicationManager;
 
 public class AccountRemover {
 
+    // Insert account removal entirely into this file whenever possible.
+
     public void handleAccountRemoval(Account account) {
         System.out.println("Are you sure you'd like to delete your account?");
         System.out.println("Enter 'yes' to continue, otherwise 'return' to go back.");

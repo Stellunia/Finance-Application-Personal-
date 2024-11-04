@@ -13,6 +13,8 @@ import java.util.List;
 public class AccountWriter {
     private Account account;
 
+    // Insert account saving into this file whenever I figure it out, I guess.
+
 
     // Function that allows "balance" value in user_(name).txt to be overwritten, foundation for other functions.
     public void overwriteBalance(int indexNumber, double newBalance) throws IOException {

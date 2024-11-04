@@ -95,15 +95,28 @@ public class Account {
     }
 
     // Handles saving user accounts into the user folder
-    private boolean saveAccount(AccountDetails account) {
+    private boolean saveAccount(AccountDetails accountDetails) {
         if (userFolder == null) {
             System.out.println("User folder does not exist.");
             return false;
         }
 
-        File userFile = new File(userFolder/* + "/" + account.getUsername()*/, "user_" + account.getUsername() + ".txt");
+        File userFile = new File(userFolder/* + "/" + account.getUsername()*/, "user_" + accountDetails.getUsername() + ".txt");
         if (userFile.exists()) {
             System.out.println("User account already exists.");
+            return false;
+        }
+
+        try (FileWriter writer = new FileWriter(userFile);
+             BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
+            bufferedWriter.write(accountDetails.getUsername());
+            bufferedWriter.newLine();
+            bufferedWriter.write(accountDetails.getPassword());
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.valueOf(accountDetails.getBalance()));
+
+        } catch (IOException e) {
+            System.out.println("Error saving account: " + e.getMessage());
             return false;
         }
         return true;
