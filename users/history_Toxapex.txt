@@ -1,0 +1,4 @@
+Title: fiddy | Message: mnuuy | Amount: -50.0 | Type: ONE_TIME | Date: 2024-11-04
+
+Title: BIG MONEY | Message: help | Amount: +10000.0 | Type: ONE_TIME | Date: 2024-11-04
+
