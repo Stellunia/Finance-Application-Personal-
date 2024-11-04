@@ -5,6 +5,7 @@ import main.Main;
 import main.account.Account;
 import main.account.AccountDetails;
 import main.account.AccountManager;
+import main.command.CommandManager;
 import main.menu.TransactionMenu;
 
 import java.io.*;
@@ -144,6 +145,7 @@ public class TransactionCreator {
                     break;
 
                 case "return":
+                    System.out.println("Returned to the previous menu. Write 'help' to get a list of commands.");
                     return;
                 case "stop":
                     transactionMenu.stopHandler();

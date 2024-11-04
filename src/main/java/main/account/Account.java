@@ -22,6 +22,7 @@ public class Account {
         //userInfo.put("Maushold", new AccountDetails("Maushold", "The Council", 4000));
     }
 
+    // Handles the login procedure for the user
     public void authenticate() {
         System.out.println("Please enter username: ");
         String nameCredentials = scanner.nextLine();
@@ -60,6 +61,7 @@ public class Account {
         }
     }
 
+    // Need to move this into "AccountWriter" eventually
     // Handles addition of new accounts
     public void accountAddition() {
         System.out.println("Please enter username: ");
@@ -81,6 +83,7 @@ public class Account {
         }
     }
 
+    // Need to move this into "AccountWriter" eventually
     // Initialise user folder to store user and history files within
     private void initializeSaveManager() {
         userFolder = new File("./users/");
@@ -94,6 +97,7 @@ public class Account {
         }
     }
 
+    // Need to move this into "AccountWriter" eventually
     // Handles saving user accounts into the user folder
     private boolean saveAccount(AccountDetails accountDetails) {
         if (userFolder == null) {
@@ -122,6 +126,7 @@ public class Account {
         return true;
     }
 
+    // Handles removal of user files, need to move this to "AccountRemover" for proper organisation
     public void removeAccount() {
         userInfo.remove(getCurrentUser());
         File userFile = new File(userFolder, "user_" + getCurrentUser() + ".txt");
@@ -135,14 +140,6 @@ public class Account {
     // Gets all "user_(username).txt" files and inserts them into a list to then assign them to the hashmap "userInfo"
     // in order for the application to be able to utilize the account functions properly
     public void loadUsers() {
-        // Use the function that scans the user information and prints it
-        // Instead of it printing it for the current user, return it and enter it into the hashmap
-        // Use a for function to go through each file and return every "username", "password" and "balance" into the hashmap
-        // Bridge the gap between Hashmap and File to make it easier to use accounts
-        // Scan the files upon each initialisation of the application and add all available "user_(name).txt" into the hashmap
-        // File accountInfo = new File(userFolder,"user_" + getCurrentUser() + ".txt");
-        // DONE.
-
         File[] userFiles = userFolder.listFiles();
         if (userFiles == null) {
             System.out.println("Unable to access the users folder.");

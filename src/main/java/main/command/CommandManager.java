@@ -30,6 +30,13 @@ public class CommandManager implements ApplicationInterface {
     }
 
     @Override
+    public void displayLoginHelp() {
+        System.out.println("Enter 'register' to create an account.");
+        System.out.println("Enter 'login' to log onto an account.");
+        System.out.println("Enter 'stop' to quit the application.");
+    }
+
+    @Override
     public void displayHelp() {
         System.out.println("Commands:");
         System.out.println(" transaction - Create a new transaction.");
@@ -62,6 +69,7 @@ public class CommandManager implements ApplicationInterface {
                     accountRemover.handleAccountRemoval(account);
                     return;
                 case "return":
+                    System.out.println("Returned to the previous menu. Write 'help' to get a list of commands.");
                     return;
                 case "help":
                     accountMenu.displayHelp();
@@ -110,6 +118,7 @@ public class CommandManager implements ApplicationInterface {
                     transactionRemover.handleTransactionRemoval(currentUser);
                     return;
                 case "return":
+                    System.out.println("Returned to the previous menu. Write 'help' to get a list of commands.");
                     return;
                 case "stop":
                     historyMenu.stopHandler();

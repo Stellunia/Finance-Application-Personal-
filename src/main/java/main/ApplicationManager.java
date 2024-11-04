@@ -1,5 +1,6 @@
 package main;
 
+import eu.hansolo.tilesfx.Command;
 import main.account.Account;
 import main.command.CommandManager;
 import main.command.StopCommand;
@@ -29,18 +30,18 @@ public class ApplicationManager {
         // with initial lock-out to prevent user's without accounts from entering
         public void readCommand(){
             while (loginCheck) {
-                System.out.println("Enter 'register' to create an account.");
-                System.out.println("Enter 'login' to log onto an account.");
+                commandManager.displayLoginHelp();
                 try {
                     String command = commandScanner.nextLine();
                     if (command.equalsIgnoreCase("login")) {
                         account.authenticate();
-                    }
-                    else if (command.equalsIgnoreCase("register")) {
+                    } else if (command.equalsIgnoreCase("register")) {
                         account.accountAddition();
+                    } else if (command.equalsIgnoreCase("stop")) {
+                        stopCommand.run();
+                        return;
                     } else {
-                        throw new IllegalArgumentException(
-                                "'" + command + "' is not a valid command. Write 'help' to get a list of commands.");
+                        throw new IllegalArgumentException("'" + command + "' is not a valid command.");
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -57,7 +58,6 @@ public class ApplicationManager {
                     throw new IllegalArgumentException("Command cannot be empty.");
                 }
 
-                //System.out.println("Welcome, " + this.accountManager);
                 String command = args[0];
                 switch (command) {
                     case "stop":
@@ -65,16 +65,12 @@ public class ApplicationManager {
                         return;
                     case "transaction":
                         commandManager.handleTransaction(account, transactionCreator);
-                        //commandManager.handleTransactionCommand(account, transaction);
                         break;
                     case "history":
-                        // DONE: Set up removal of transactions
                         commandManager.handleHistory(account);
-                        //commandManager.handleHistoryCommand(account);
                         break;
                     case "account":
                         commandManager.handleAccount(account);
-                        //commandManager.handleAccountCommand(account);
                         break;
                     case "help":
                         commandManager.displayHelp();
