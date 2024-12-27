@@ -31,6 +31,7 @@ public class AccountWriter {
     // "Title: Stinky, Message: You are stinky, Amount: 500, Type: RECURRING_WEEKLY, Date: 25-09-2024"
     // "Title: Stinky | Message: You are stinky | Amount: 500 | Type: RECURRING_WEEKLY | Date: 25-09-2024"
 
+    // TODO: Change to Database-variant
     // Handles writing to history_(user).txt file in order to append new transactions into the file itself.
     public void writeHistory(String title, String message, double amount, TransType transType, LocalDate currentDate, boolean isDeposit) throws IOException {
         String username = account.getCurrentUser();

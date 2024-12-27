@@ -4,19 +4,25 @@ import main.Main;
 import main.account.Account;
 import main.account.AccountDetails;
 import main.command.StopCommand;
+import main.database.DatabaseManager;
+import main.database.UsersDTO;
+
+import javax.xml.crypto.Data;
 
 public class TransactionMenu implements MenuInterface {
     private StopCommand stopCommand;
     private Account account;
+    private DatabaseManager databaseManager;
 
     public TransactionMenu(Main main) {
         stopCommand = new StopCommand(main);
+        databaseManager = new DatabaseManager();
         this.account = account;
     }
 
     @Override
     public void displayHelp() {
-        AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
+        UsersDTO currentAccount = databaseManager.getUserByID(Account.getCurrentUser());
         System.out.println(account.getCurrentUser() + " has currently got: " + currentAccount.getBalance() + " to spend.");
         System.out.println("Type 'create' to send a transaction to someone else. Does not work yet. DO NOT USE.");
         System.out.println("Type 'deposit' to add balance to your account.");

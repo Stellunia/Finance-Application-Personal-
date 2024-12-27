@@ -1,5 +1,6 @@
 package main.account;
 
+import main.database.UsersDTO;
 import main.transaction.TransType;
 
 import java.io.IOException;
@@ -12,9 +13,10 @@ public class AccountManager {
         accountWriter = new AccountWriter();
     }
 
-    // Function to add balance to an account.
+/*    // Function to add balance to an account.
     public double addBalanceInt(String addTitle, String addMessage, double addAmount, TransType addTransType, LocalDate addTransDate) {
-        AccountDetails currentAccount = Account.userInfo.get(Account.getCurrentUser());
+        UsersDTO currentAccount = Account.userInfo.get(Account.getCurrentUser());
+        UsersDTO currentAccount = databaseManager.getUserByID(currentUser);
 
         double newBalance = currentAccount.getBalance() + addAmount;
         currentAccount.setBalance(newBalance);
@@ -47,5 +49,5 @@ public class AccountManager {
             System.out.println(username + " does not have enough balance to cover this transaction.");
         }
         return currentAccount.getBalance();
-    }
+    }*/
 }
