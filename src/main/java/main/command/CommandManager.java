@@ -4,6 +4,8 @@ import main.ApplicationInterface;
 import main.ApplicationManager;
 import main.Main;
 import main.account.AccountRemover;
+import main.database.DatabaseManager;
+import main.database.UsersDTO;
 import main.menu.AccountMenu;
 import main.menu.HistoryMenu;
 import main.transaction.HistoryReader;
@@ -20,6 +22,7 @@ public class CommandManager implements ApplicationInterface {
     private AccountRemover accountRemover;
     private HistoryMenu historyMenu;
     private AccountMenu accountMenu;
+    private DatabaseManager databaseManager;
 
     public CommandManager (Main main) {
         historyReader = new HistoryReader();
@@ -27,7 +30,9 @@ public class CommandManager implements ApplicationInterface {
         accountRemover = new AccountRemover();
         historyMenu = new HistoryMenu(main);
         accountMenu = new AccountMenu(main);
+        databaseManager = new DatabaseManager();
     }
+
 
     @Override
     public void displayLoginHelp() {
@@ -66,7 +71,9 @@ public class CommandManager implements ApplicationInterface {
 
             switch(accountCommand) {
                 case "remove":
-                    accountRemover.handleAccountRemoval(account);
+                    UsersDTO currentAccount = databaseManager.getUserByID(Account.getCurrentUser());
+                    String userid = currentAccount.getId();
+                    accountRemover.handleAccountRemoval(userid);
                     return;
                 case "return":
                     System.out.println("Returned to the previous menu. Write 'help' to get a list of commands.");

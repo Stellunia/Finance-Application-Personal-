@@ -20,9 +20,6 @@ public class DatabaseManager {
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
                     String id = (result.getObject("id", java.util.UUID.class)).toString(); //TODO: Application doesn't like the fact that it's a String
-                    /*Error at getUserByID, DatabaseManager: ERROR: operator does not exist: uuid = character varying
-                    Hint: No operator matches the given name and argument types. You might need to add explicit type casts.
-                    Position: 30*/
                     String username = result.getString("username");
                     String password = result.getString("password");
                     double balance = result.getDouble("balance");
@@ -50,7 +47,6 @@ public class DatabaseManager {
     }
 
     public static String authenticate(String usernameInput, String passwordInput) {
-        Statement authUser = null;
         try (PreparedStatement loadUser = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
             loadUser.setString(1, usernameInput);
             loadUser.setString(2, passwordInput);
@@ -72,18 +68,18 @@ public class DatabaseManager {
             createTables.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";");
             createTables.execute("CREATE TABLE IF NOT EXISTS users (" +
                     "id uuid DEFAULT uuid_generate_v4()," +
-                    "username TEXT NOT NULL," +
+                    "username TEXT NOT NULL UNIQUE," +
                     "password TEXT NOT NULL," +
                     "balance FLOAT NOT NULL," +
                     "PRIMARY KEY (id))"
             );
 
             createTables.execute("CREATE TABLE IF NOT EXISTS transactionHistory (" +
-                    "id SERIAL PRIMARY KEY," +
-                    "userid uuid," +
+                    "id uuid DEFAULT uuid_generate_v4()," +
+                    "userid uuid NOT NULL," +
                     "title TEXT NOT NULL," +
                     "message TEXT NOT NULL," +
-                    "amount double NOT NULL," +
+                    "amount FLOAT NOT NULL," +
                     "type TEXT NOT NULL," +
                     "date DATE NOT NULL," +
                     "PRIMARY KEY (id)," +
