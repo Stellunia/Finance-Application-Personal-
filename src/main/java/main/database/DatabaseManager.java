@@ -14,7 +14,7 @@ public class DatabaseManager {
     }
 
     public UsersDTO getUserByID (String idInput){
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?;")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id::text = ?;")) {
             statement.setString(1, idInput);
 
             try (ResultSet result = statement.executeQuery()) {
