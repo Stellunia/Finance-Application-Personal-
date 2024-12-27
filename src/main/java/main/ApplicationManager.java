@@ -18,7 +18,7 @@ public class ApplicationManager {
         private DatabaseManager databaseManager;
 
         static public boolean loginCheck = true;
-        static public boolean accountCheck = false;
+        // TODO: Change to check for user ID being a value instead of "null" to allow for login check
 
         public ApplicationManager(Main main) {
             stopCommand = new StopCommand(main);
@@ -64,8 +64,8 @@ public class ApplicationManager {
                 String command = args[0];
                 switch (command) {
                     case "stop":
-                        stopCommand.run();
                         databaseManager.closeConnection();
+                        stopCommand.run();
                         return;
                     case "transaction":
                         commandManager.handleTransaction(account, transactionCreator);

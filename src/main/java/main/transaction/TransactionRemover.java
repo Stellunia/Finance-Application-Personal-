@@ -6,7 +6,7 @@ public class TransactionRemover {
     private TransactionCreator transactionCreator;
     private ApplicationManager applicationManager;
 
-    // TODO: Change to Database-variant, removing column attributed to the username and transaction title
+    // TODO: Change to Database-variant, removing column attributed to the username and serial ID
     public void handleTransactionRemoval(String currentUser) {
         while (true) {
             System.out.println("Type 'remove' to delete a transaction.");

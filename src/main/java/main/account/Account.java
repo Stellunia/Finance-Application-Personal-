@@ -3,8 +3,8 @@ package main.account;
 import main.ApplicationManager;
 import main.database.DatabaseManager;
 import main.database.UsersDTO;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.sql.*;
 import java.util.HashMap;
@@ -14,19 +14,16 @@ public class Account {
     public File userFolder;
     private Scanner scanner = new Scanner(System.in);
     static String currentUser = null;
-    private String currentPass = null;
-    private double currentBalance = 0;
     public static HashMap<String, AccountDetails> userInfo = new HashMap<>();
     private DatabaseManager databaseManager;
 
     public Account() {
         databaseManager = new DatabaseManager();
-        //DatabaseManager.initializeDatabaseLoader();
         //userInfo.put("Gardevoir", new AccountDetails("PokemonType", "PokemonName", 5000));
         //userInfo.put("Maushold", new AccountDetails("Maushold", "The Council", 4000));
     }
 
-    // TODO: Change to Database-variant
+    // DONE: Change to Database-variant
     // Handles the login procedure for the user
     public void authenticate() {
         System.out.println("Please enter username: ");
@@ -53,7 +50,6 @@ public class Account {
             throw new IllegalArgumentException(
                     "'" + nameCredentials + "' is not a valid username.");
         }
-        return;
     }
 
     // Get current user's balance
@@ -84,7 +80,7 @@ public class Account {
                 createUser.setString(2, passCredentials);
                 createUser.setDouble(3, 1000);
                 if (createUser.executeUpdate() == 0) {
-                    System.out.println("Nothing was inserted, perhaps there was a conflict.");
+                    System.out.println("Nothing was inserted into the database.");
                     return;
                 }
             } catch (SQLException e) {
@@ -94,51 +90,22 @@ public class Account {
             }
 
             System.out.println("Registered user " + nameCredentials + ", with an initial balance of: '1000'.");
-
-            //AccountManager.userInfo.put(nameCredentials, new AccountDetails(nameCredentials, passCredentials, 1000));
-/*            AccountDetails newAccount = new AccountDetails(nameCredentials, passCredentials, 1000.0);
-            userInfo.put(nameCredentials, newAccount);*/
     }
 }
-
-    // TODO: Change to Database-variant: By method of getting the userid and then removing the row from the database.
-    // Handles removal of user files, need to move this to "AccountRemover" for proper organisation
-    public void removeAccount() {
-        userInfo.remove(getCurrentUser());
-        File userFile = new File(userFolder, "user_" + getCurrentUser() + ".txt");
-        File histFile = new File(userFolder, "history_" + getCurrentUser() + ".txt");
-        userFile.delete();
-        histFile.delete();
-        ApplicationManager.loginCheck = true;
-        ApplicationManager.accountCheck = false;
-    }
 
     // TODO: Change to Database-variant
     // Handles reading out the user's account details when called upon
     public void readAccountDetails() {
-        File accountInfo = new File(userFolder,"user_" + getCurrentUser() + ".txt");
+        UsersDTO accountInfo = databaseManager.getUserByID(Account.getCurrentUser());
+        String username = accountInfo.getUsername();
+        String password = accountInfo.getPassword();
+        String userid = accountInfo.getId();
+        double balance = accountInfo.getBalance();
 
-        if (!accountInfo.exists()) {
-            System.out.println("There was no file found attributed to " + getCurrentUser() + ".");
-            return;
-        }
-        try (Scanner fileScanner = new Scanner(accountInfo)) {
-            if (fileScanner.hasNextLine()) {
-                String accountUsername = fileScanner.nextLine();
-                String accountPassword = fileScanner.hasNextLine() ? fileScanner.nextLine(): "N/A";
-                String accountBalance = fileScanner.hasNextLine() ? fileScanner.nextLine(): "0";
-
-                System.out.println("Username: " + accountUsername);
-                System.out.println("Password: " + accountPassword);
-                System.out.println("Balance: " + accountBalance);
-            } else {
-                System.out.println("This user's account information is empty.");
-            }
-
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found.");
-            e.printStackTrace();
-        }
+        System.out.println("User ID: " + userid);
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+        System.out.println("Balance: " + balance);
     }
 
 
@@ -149,7 +116,5 @@ public class Account {
 
     // Getters for the user, not all in use
     public static String getCurrentUser() { return currentUser; }
-    public String getCurrentPass() { return currentPass; }
-    public double getCurrentBalance() { return currentBalance; }
 }
 

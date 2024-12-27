@@ -6,8 +6,11 @@ import main.account.Account;
 import main.account.AccountDetails;
 import main.account.AccountManager;
 import main.command.CommandManager;
+import main.database.DatabaseManager;
+import main.database.UsersDTO;
 import main.menu.TransactionMenu;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,19 +19,23 @@ import java.util.Scanner;
 
 public class TransactionCreator {
     private Account account;
-    private AccountDetails accountDetails;
     private AccountManager accountManager;
     private TransactionMenu transactionMenu;
+    private DatabaseManager databaseManager;
+    private TransactionManager transactionManager;
 
     public TransactionCreator(Main main) {
         transactionMenu = new TransactionMenu(main);
         accountManager = new AccountManager();
+        databaseManager = new DatabaseManager();
+        transactionManager = new TransactionManager();
     }
 
+    //Cannot invoke "main.account.AccountDetails.addTransactionType(main.transaction.TransactionType)" because "currentAccount" is null
     // Handles the creation of transactions
     public void createTransaction(Account account) {
         while (true) {
-            AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
+            UsersDTO currentAccount = databaseManager.getUserByID(Account.getCurrentUser());
             transactionMenu.displayHelp();
 
             String transCommand = ApplicationManager.commandScanner.nextLine();
@@ -99,12 +106,12 @@ public class TransactionCreator {
                     }
                     LocalDate addStartDate = LocalDate.now();
                     TransactionType newTransaction = new TransactionType(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
-                    currentAccount.addTransactionType(newTransaction);
+                    transactionManager.addTransactionType(newTransaction);
                     System.out.println("Successfully deposited balance into your account.");
 
                     //AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
                     //currentAccount.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
-                    //accountManager.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
+                    accountManager.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
                     break;
 
                 case "send":
@@ -137,10 +144,10 @@ public class TransactionCreator {
                     }
                     LocalDate removeStartDate = LocalDate.now();
                     TransactionType newRemoveTransaction = new TransactionType(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
-                    currentAccount.addTransactionType(newRemoveTransaction);
+                    transactionManager.addTransactionType(newRemoveTransaction);
                     System.out.println("Successfully sent a transaction.");
 
-                    //accountManager.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
+                    accountManager.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
 
                     break;
 
