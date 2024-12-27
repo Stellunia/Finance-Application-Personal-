@@ -1,42 +1,47 @@
 package main.account;
 
 import main.ApplicationManager;
+import main.database.DatabaseManager;
+import main.database.UsersDTO;
 
+import javax.xml.crypto.Data;
 import java.io.*;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Account {
     public File userFolder;
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     static String currentUser = null;
     private String currentPass = null;
     private double currentBalance = 0;
     public static HashMap<String, AccountDetails> userInfo = new HashMap<>();
-    private FileReader fileReader;
+    private DatabaseManager databaseManager;
 
     public Account() {
-        initializeSaveManager();
-        loadUsers();
+        databaseManager = new DatabaseManager();
+        //DatabaseManager.initializeDatabaseLoader();
         //userInfo.put("Gardevoir", new AccountDetails("PokemonType", "PokemonName", 5000));
         //userInfo.put("Maushold", new AccountDetails("Maushold", "The Council", 4000));
     }
 
+    // TODO: Change to Database-variant
     // Handles the login procedure for the user
     public void authenticate() {
         System.out.println("Please enter username: ");
         String nameCredentials = scanner.nextLine();
 
-        if (userInfo.containsKey(nameCredentials)) {
+        if (DatabaseManager.authenticateUser(nameCredentials)) {
             System.out.println("Please enter password: ");
             String passCredentials = scanner.nextLine();
 
-            if (userInfo.containsKey(nameCredentials) && userInfo.get
-                    (nameCredentials).getPassword().equals(passCredentials)) {
+            String userId = (DatabaseManager.authenticate(nameCredentials, passCredentials));
+            if (userId != null) {
                 System.out.println("Login successful.");
                 System.out.println("Welcome, " + nameCredentials + ".");
                 System.out.println("Write 'help' to receive a list of commands.");
-                currentUser = nameCredentials;
+                currentUser = userId;
                 getBalance();
                 ApplicationManager.loginCheck = false;
             } else {
@@ -53,7 +58,9 @@ public class Account {
 
     // Get current user's balance
     public double getBalance() {
-        AccountDetails currentAccount = userInfo.get(currentUser);
+        UsersDTO currentAccount = databaseManager.getUserByID(currentUser);
+        //TODO: Get the user information for the relevant user and establish them as the current user
+        // Currently gets the AccountDetails and establishes that instead of the database entry
         if (currentAccount != null) {
             return currentAccount.getBalance();
         } else {
@@ -61,71 +68,40 @@ public class Account {
         }
     }
 
+    // DONE: Change to Database-variant
     // Need to move this into "AccountWriter" eventually
     // Handles addition of new accounts
     public void accountAddition() {
         System.out.println("Please enter username: ");
         String nameCredentials = scanner.nextLine();
+
         if (!userInfo.containsKey(nameCredentials)) {
             System.out.println("Please enter password: ");
             String passCredentials = scanner.nextLine();
+
+            try (PreparedStatement createUser = DatabaseManager.connection.prepareStatement("INSERT INTO users (username, password, balance) VALUES (?, ?, ?)")) {
+                createUser.setString(1, nameCredentials);
+                createUser.setString(2, passCredentials);
+                createUser.setDouble(3, 1000);
+                if (createUser.executeUpdate() == 0) {
+                    System.out.println("Nothing was inserted, perhaps there was a conflict.");
+                    return;
+                }
+            } catch (SQLException e) {
+                System.out.println("Failed to save user" + nameCredentials + "to database.");
+                System.out.println("Error: " + e.getMessage());
+                return;
+            }
+
+            System.out.println("Registered user " + nameCredentials + ", with an initial balance of: '1000'.");
+
             //AccountManager.userInfo.put(nameCredentials, new AccountDetails(nameCredentials, passCredentials, 1000));
-            AccountDetails newAccount = new AccountDetails(nameCredentials, passCredentials, 1000.0);
-            userInfo.put(nameCredentials, newAccount);
-
-            if (saveAccount(newAccount)) {
-                System.out.println("Account was created with an initial balance of: '1000'");
-            } else {
-                System.out.println("Account was created, but there was an error saving the information.");
-            }
-        } else {
-            System.out.println("Username already exists.");
-        }
+/*            AccountDetails newAccount = new AccountDetails(nameCredentials, passCredentials, 1000.0);
+            userInfo.put(nameCredentials, newAccount);*/
     }
+}
 
-    // Need to move this into "AccountWriter" eventually
-    // Initialise user folder to store user and history files within
-    private void initializeSaveManager() {
-        userFolder = new File("./users/");
-        //historyFolder = new File("./users/history/");
-        if (!userFolder.exists()) {
-            if (userFolder.mkdirs()) {
-                System.out.println("User folder was created.");
-            } else {
-                System.out.println("Failed to create user folder.");
-            }
-        }
-    }
-
-    // Need to move this into "AccountWriter" eventually
-    // Handles saving user accounts into the user folder
-    private boolean saveAccount(AccountDetails accountDetails) {
-        if (userFolder == null) {
-            System.out.println("User folder does not exist.");
-            return false;
-        }
-
-        File userFile = new File(userFolder/* + "/" + account.getUsername()*/, "user_" + accountDetails.getUsername() + ".txt");
-        if (userFile.exists()) {
-            System.out.println("User account already exists.");
-            return false;
-        }
-
-        try (FileWriter writer = new FileWriter(userFile);
-             BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
-            bufferedWriter.write(accountDetails.getUsername());
-            bufferedWriter.newLine();
-            bufferedWriter.write(accountDetails.getPassword());
-            bufferedWriter.newLine();
-            bufferedWriter.write(String.valueOf(accountDetails.getBalance()));
-
-        } catch (IOException e) {
-            System.out.println("Error saving account: " + e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
+    // TODO: Change to Database-variant: By method of getting the userid and then removing the row from the database.
     // Handles removal of user files, need to move this to "AccountRemover" for proper organisation
     public void removeAccount() {
         userInfo.remove(getCurrentUser());
@@ -137,49 +113,7 @@ public class Account {
         ApplicationManager.accountCheck = false;
     }
 
-    // Gets all "user_(username).txt" files and inserts them into a list to then assign them to the hashmap "userInfo"
-    // in order for the application to be able to utilize the account functions properly
-    public void loadUsers() {
-        File[] userFiles = userFolder.listFiles();
-        if (userFiles == null) {
-            System.out.println("Unable to access the users folder.");
-            return;
-        }
-
-        for (File accountInfo : userFiles){
-            String username = null;
-            String password = null;
-            double balance = 0;
-
-            if (accountInfo.getName().startsWith("user_") &&  accountInfo.getName().endsWith(".txt")){
-                try (Scanner fileScanner = new Scanner(accountInfo)){
-
-                    if (fileScanner.hasNextLine()) {
-                        username = fileScanner.nextLine().trim();
-                    }
-                    if (fileScanner.hasNextLine()) {
-                        password = fileScanner.nextLine().trim();
-                    }
-                    if (fileScanner.hasNextLine()) {
-                        try {
-                            balance = Double.parseDouble(fileScanner.nextLine().trim());
-                        } catch (NumberFormatException e) {
-                            System.out.println("The balance amount in " + accountInfo.getName() + " could not be retrieved.");
-                        }
-                    }
-
-                    if (username != null && password != null) {
-                        userInfo.put(username, new AccountDetails(username, password, balance));
-                    } else {
-                        System.out.println("Could not read the data in " + accountInfo.getName());
-                    }
-                } catch (FileNotFoundException e) {
-                    System.out.println("Error reading " + accountInfo.getName());
-                }
-            }
-        }
-    }
-
+    // TODO: Change to Database-variant
     // Handles reading out the user's account details when called upon
     public void readAccountDetails() {
         File accountInfo = new File(userFolder,"user_" + getCurrentUser() + ".txt");

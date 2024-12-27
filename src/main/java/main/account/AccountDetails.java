@@ -14,17 +14,17 @@ public class AccountDetails {
     private double balance;
 
     // Return getters
-    public String getUsername() { return username; }
+/*    public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public double getBalance() { return balance; }
+    public double getBalance() { return balance; }*/
 
     // Full hashmap setter
-    public AccountDetails(String username, String password, Double balance) {
+/*    public AccountDetails(String username, String password, double balance) {
         this.username = username;
         this.password = password;
         this.balance = balance;
         //this.transactionType = new ArrayList<>(); // Unused transaction list, instead opted for history_(user).txt to be read into the application
-    }
+    }*/
 
     // Singular values setters
     public void setUsername(String username) { this.username = username; }

@@ -104,7 +104,7 @@ public class TransactionCreator {
 
                     //AccountDetails currentAccount = account.userInfo.get(account.getCurrentUser());
                     //currentAccount.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
-                    accountManager.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
+                    //accountManager.addBalanceInt(addBalanceTitle, addBalanceMessage, addBalanceAmount, addTransType, addStartDate);
                     break;
 
                 case "send":
@@ -140,7 +140,7 @@ public class TransactionCreator {
                     currentAccount.addTransactionType(newRemoveTransaction);
                     System.out.println("Successfully sent a transaction.");
 
-                    accountManager.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
+                    //accountManager.removeBalanceInt(removeBalanceTitle, removeBalanceMessage, removeBalanceAmount, removeTransType, removeStartDate);
 
                     break;
 
@@ -156,6 +156,7 @@ public class TransactionCreator {
         }
     }
 
+    // TODO: Change to Database-variant
     // DONE: Needs to handle the removal of transactions from the history_(user).txt.
     public static void removeTransaction(String currentUser) {
         List<String> transactions = new ArrayList<>();

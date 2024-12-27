@@ -4,6 +4,7 @@ import eu.hansolo.tilesfx.Command;
 import main.account.Account;
 import main.command.CommandManager;
 import main.command.StopCommand;
+import main.database.DatabaseManager;
 import main.transaction.TransactionCreator;
 
 import java.util.Scanner;
@@ -14,12 +15,14 @@ public class ApplicationManager {
         private StopCommand stopCommand;
         private Account account;
         private TransactionCreator transactionCreator;
+        private DatabaseManager databaseManager;
 
         static public boolean loginCheck = true;
         static public boolean accountCheck = false;
 
         public ApplicationManager(Main main) {
             stopCommand = new StopCommand(main);
+            databaseManager = new DatabaseManager();
             commandManager = new CommandManager(main);
             transactionCreator = new TransactionCreator(main);
             account = new Account();
@@ -62,6 +65,7 @@ public class ApplicationManager {
                 switch (command) {
                     case "stop":
                         stopCommand.run();
+                        databaseManager.closeConnection();
                         return;
                     case "transaction":
                         commandManager.handleTransaction(account, transactionCreator);

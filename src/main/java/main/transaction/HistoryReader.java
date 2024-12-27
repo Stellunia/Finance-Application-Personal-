@@ -42,6 +42,7 @@ public class HistoryReader {
         }
     }
 
+    // TODO: Change to Database-variant
     // Handles reading out the history details for the user when called upon
     public void readHistoryDetails(LocalDate startDate, LocalDate endDate) {
         List<Transaction> transactionList = readTransactions(account.getCurrentUser());
@@ -79,6 +80,7 @@ public class HistoryReader {
         }
     }
 
+    // TODO: Change to Database-variant
     // Read existing transactions into lists to use for sorting
     public List<Transaction> readTransactions(String currentUser) {
         List<Transaction> transactions = new ArrayList<>();
