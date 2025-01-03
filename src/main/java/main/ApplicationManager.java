@@ -29,6 +29,14 @@ public class ApplicationManager {
             commandScanner = new Scanner(System.in);
         }
 
+/*        public boolean loginCheck() {
+            if (Account.getCurrentUser() != null)
+            {
+                return false;
+            }
+            return true;
+        }*/
+
         // Handles the general usage of the application with a scanner that reads user inputs,
         // with initial lock-out to prevent user's without accounts from entering
         public void readCommand(){
@@ -81,6 +89,7 @@ public class ApplicationManager {
                         break;
                     case "logout":
                         loginCheck = true;
+                        // TODO: Set userID variable to null to perform logout
                         System.out.println("Logged out successfully.");
                         return;
                     default:

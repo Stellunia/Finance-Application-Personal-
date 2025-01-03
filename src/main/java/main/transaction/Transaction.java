@@ -21,6 +21,14 @@ public class Transaction {
         this.transDate = transDate;
     }
 
+    public Transaction(String transTitle, String transMessage, double transAmount, String transType, String transDate) {
+        this.transTitle = transTitle;
+        this.transMessage = transMessage;
+        this.transAmount = transAmount;
+        this.transType = transType;
+        this.transDate = LocalDate.parse(transDate);
+    }
+
     public String getTransTitle() { return transTitle; }
     public String getTransMessage() { return transMessage; }
     public double getTransAmount() { return transAmount; }

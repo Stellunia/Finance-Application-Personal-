@@ -23,6 +23,7 @@ public class TransactionMenu implements MenuInterface {
     @Override
     public void displayHelp() {
         UsersDTO currentAccount = databaseManager.getUserByID(Account.getCurrentUser());
+        // TODO: Add username instead of UserID readout
         System.out.println(account.getCurrentUser() + " has currently got: " + currentAccount.getBalance() + " to spend.");
         System.out.println("Type 'create' to send a transaction to someone else. Does not work yet. DO NOT USE.");
         System.out.println("Type 'deposit' to add balance to your account.");
