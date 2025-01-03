@@ -5,17 +5,9 @@ import main.database.UsersDTO;
 import main.transaction.TransType;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 import static main.database.DatabaseManager.connection;
 
@@ -73,6 +65,7 @@ public class AccountWriter {
             statement.setDouble(3, amount);
             statement.setString(4, transType.toString());
             statement.setDate(5, date);
+            // TODO: add back isDeposit to table and thus checks for - or +
 
             if (statement.executeUpdate() == 0) {
                 System.out.println("Nothing was inserted.");

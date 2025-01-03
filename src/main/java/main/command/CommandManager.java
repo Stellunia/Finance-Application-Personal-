@@ -55,7 +55,7 @@ public class CommandManager implements ApplicationInterface {
     @Override
     public void handleTransaction(Account account, TransactionCreator transaction) {
         System.out.println("Create a recurring or one-time transaction.");
-        //account.loadUsers();
+        //account.loadUsers(); REDUNDANT
         transaction.createTransaction(account);
     }
 
